@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>💌 Sorpresa mi amor</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&family=Dancing+Script:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              rose: "#f5c2c7",
+              blush: "#fde8ec",
+              lavender: "#e8d5f5",
+              mint: "#d5f0e8",
+              peach: "#fde5d0",
+              mauve: {
+                DEFAULT: "#c9a0b0",
+                deep: "#a07888",
+              },
+              "text-primary": "#5a3d4a",
+              "text-secondary": "#9b7080",
+            },
+            fontFamily: {
+              serif: ["Playfair Display", "serif"],
+              sans: ["Lato", "sans-serif"],
+              script: ["Dancing Script", "cursive"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes floatY {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-6deg);
+        }
+        50% {
+          transform: rotate(6deg) translateY(-3px);
+        }
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.8s 0.3s ease forwards;
+      }
+      .animate-float-y {
+        animation: floatY 4s ease-in-out infinite;
+      }
+      .animate-sway {
+        animation: sway 3s ease-in-out infinite;
+      }
+      .animate-blink {
+        animation: blink 2.2s ease-in-out infinite;
+      }
+
+      .envelope-flap {
+        transform-origin: top center;
+        transition: transform 0.55s ease;
+      }
+      .envelope-opening .envelope-flap {
+        transform: rotateX(-165deg);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 90% 50% at 0% 0%,
+            rgba(245, 194, 199, 0.24) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 70% 60% at 100% 100%,
+            rgba(232, 213, 245, 0.24) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 50% 70% at 50% 30%,
+            rgba(253, 232, 236, 0.18) 0%,
+            transparent 60%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+    </style>
+  </head>
+
+  <body
+    class="min-h-screen bg-[#fffbfc] text-text-primary font-sans overflow-x-hidden"
+  >
+    <!-- Toast -->
+    <div
+      id="toast"
+      class="fixed bottom-7 left-1/2 -translate-x-1/2 translate-y-4 bg-text-primary/95 text-white px-6 py-3 rounded-full text-sm z-[200] opacity-0 pointer-events-none transition-all duration-300 whitespace-nowrap"
+    ></div>
+
+    <div
+      class="relative z-10 w-full max-w-[520px] mx-auto px-5 pb-16 flex flex-col items-center"
+    >
+      <!-- Entrance -->
+      <div
+        id="entrance"
+        class="flex flex-col items-center justify-center min-h-screen gap-6 opacity-0 animate-fade-in"
+      >
+        <p
+          class="font-serif italic text-lg md:text-xl text-mauve text-center animate-float-y"
+        >
+          Hay algo especial para ti…
+        </p>
+
+        <div
+          id="envelope"
+          onclick="openEnvelope()"
+          class="relative cursor-pointer select-none"
+          style="width: clamp(155px, 44vw, 200px)"
+        >
+          <div
+            class="w-full aspect-[1.4/1] bg-gradient-to-br from-blush to-rose rounded-lg rounded-b-2xl shadow-[0_10px_36px_rgba(180,100,130,0.13)] flex items-center justify-center relative transition-transform duration-250 hover:-translate-y-1 active:scale-97"
+          >
+            <div
+              class="envelope-flap absolute top-0 left-0 w-full h-[55%] overflow-hidden"
+            >
+              <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 opacity-55"
+                style="
+                  border-left: 52% solid transparent;
+                  border-right: 52% solid transparent;
+                  border-top: 54% solid #c9a0b0;
+                "
+              ></div>
+            </div>
+
+            <div
+              class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_2px_12px_rgba(180,100,130,0.13)] z-[2] relative"
+            >
+              <i class="ri-heart-fill text-xl text-mauve"></i>
+            </div>
+          </div>
+        </div>
+
+        <p
+          class="text-xs text-text-secondary font-light tracking-wide text-center animate-blink"
+        >
+          <i class="ri-arrow-up-line align-middle text-sm"></i> Toca el sobre
+          para abrirlo
+        </p>
+      </div>
+
+      <!-- Letter Section -->
+      <div
+        id="letterSection"
+        class="hidden w-full pt-11 flex flex-col items-center gap-7 opacity-0 translate-y-7 transition-all duration-750"
+      >
+        <!-- Header -->
+        <div class="text-center w-full">
+          <div class="flex justify-center gap-2.5 mb-4">
+            <i
+              class="ri-flower-fill text-2xl md:text-3xl text-mauve-deep inline-block animate-sway"
+            ></i>
+            <i
+              class="ri-hearts-fill text-2xl md:text-3xl inline-block animate-sway"
+              style="color: #b070a0; animation-delay: 0.4s"
+            ></i>
+            <i
+              class="ri-sparkling-fill text-2xl md:text-3xl text-mauve inline-block animate-sway"
+              style="animation-delay: 0.8s"
+            ></i>
+            <i
+              class="ri-hearts-fill text-2xl md:text-3xl inline-block animate-sway"
+              style="color: #b070a0; animation-delay: 1.2s"
+            ></i>
+            <i
+              class="ri-flower-fill text-2xl md:text-3xl text-mauve-deep inline-block animate-sway"
+              style="animation-delay: 1.6s"
+            ></i>
+          </div>
+          <h1
+            class="font-serif italic text-xl md:text-2xl text-text-primary mb-1"
+          >
+            Para ti y con muchísimo amor
+          </h1>
+        </div>
+
+        <!-- Paper -->
+        <div
+          class="w-full bg-white/80 backdrop-blur-[18px] border border-rose/30 rounded-3xl p-6 md:p-10 shadow-[0_8px_42px_rgba(180,100,130,0.13)] relative overflow-hidden"
+        >
+          <div
+            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose via-lavender via-mint via-peach to-rose rounded-t-3xl"
+          ></div>
+
+          <i
+            class="ri-flower-fill absolute top-2.5 left-3 text-6xl opacity-[0.055] pointer-events-none leading-none -rotate-[14deg]"
+          ></i>
+          <i
+            class="ri-heart-3-fill absolute bottom-2.5 right-3 text-6xl opacity-[0.055] pointer-events-none leading-none rotate-[14deg]"
+          ></i>
+
+          <p class="text-xs text-text-secondary text-right mb-5 font-light">
+            19 de febrero de 2026
+          </p>
+          <p class="font-script text-xl md:text-2xl text-mauve-deep mb-4">
+            Mi princesita hermosa,
+          </p>
+          <p
+            class="text-sm md:text-base leading-relaxed text-text-primary font-light whitespace-pre-wrap min-h-[160px]"
+          >
+            Este es un mensaje especial para el amor de mi vida, para la mujer más maravillosa de este universo y que tiene mi corazón solo para ella.
+            Mi amor, en serio que te lo sigo diciendo y te lo diré por siempre, y es que mi corazón es únicamente y solamente tuyo, que quede claro que no habrá nadie ni nada que pueda quitártelo.
+            Te agradezco siempre mi amor por todo el inmenso amor, dedicación y paciencia que me tienes, digo yo sé que me he buscado muchas veces ciertas situaciones que no han estado del todo bien, ya sea porque no he sido claro o me he pasado de tonto jajaja, pero bueno mi amor en serio muchas gracias porque me entiendes, me amas y siempre deseas seguir conmigo a mi lado.
+            Por eso mismo es que siempre te digo que haces más de lo que tu piensas, que logras en mi muchísimo más de lo que dices hacer, porque en serio cada día son tus palabras y tus acciones lo que me demuestran que estás completamente para mi y que tu amor siempre estará presente en cada momento.
+            Es por eso que tu compañia, tu dedicación, tu tiempo, los pequeños detalles que tienes hacia mi que en realidad son muy pero muy grandes para mi, son todos esos días, esas llamadas, esos mensajes y audios los que en serio me encantan y llevo siempre cada día conmigo.
+            En serio que cada día me haces sentir siempre enamorado, loquito por ti, loco por esos hermosos ojos, por esa tierna sonrisa, por todo de ti que te lo repito de nuevo, me encanta todo de ti, no hay ni un solo detalle que no ame de ti.
+            Gracias mi amor por hacerme el hombre más afortunado, porque me diste la oportunidad aquel día de poder entrar a tu corazón y formar parte ahora de tu familia que se conviritió ya en nuestra, porque esto es de los dos, es algo que estamos construyendo juntos.
+            Gracias mi amor porque sé perfectamente que contigo todo lo puedo, todo lo tengo, toda la vida será por siempre lo mejor, y contigo tendré siempre los mejores días, los mejores recuerdos y los mejores deseos y sueños.
+            Te amo muchísimo mi amor, y mucho más de lo que crees, aunque bueno tengo que decir siempre que tu me amas muchísimo más.
+            Muchas gracias mi amor por aceptarme tal como soy y te prometo hacerte muy feliz, estar ahí para ti y siempre seguir mejorando como persona, como hombre, como tu esposito hermoso.
+            Felices 2.7, te amo muchísimo mi amor
+          </p>
+
+          <div class="mt-7 text-right">
+            <p class="text-xs text-text-secondary font-light mb-1">
+              con todo mi amor, mi ser y mi alma,
+            </p>
+            <p class="font-script text-2xl md:text-3xl text-mauve-deep">
+              Tu esposito hermoso.
+            </p>
+          </div>
+        </div>
+
+        <!-- GIF Container -->
+        <div
+          class="w-full bg-white/80 backdrop-blur-[18px] border border-rose/30 rounded-3xl p-6 shadow-[0_8px_42px_rgba(180,100,130,0.13)] relative overflow-hidden"
+        >
+          <div
+            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose via-lavender via-mint via-peach to-rose rounded-t-3xl"
+          ></div>
+
+          <div class="flex flex-col items-center gap-3">
+            <p
+              class="font-serif italic text-base md:text-lg text-mauve-deep text-center"
+            >
+              Un regalito más de Stitch
+            </p>
+
+            <div class="w-full max-w-sm rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src="/stitch.gif"
+                alt="Regalo de stitch"
+                class="w-full h-auto object-cover"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="text-center mt-1.5">
+          <a
+            href="/"
+            class="text-xs text-text-secondary no-underline inline-flex items-center gap-1.5 font-light transition-colors hover:text-mauve"
+          >
+            <i class="ri-arrow-left-line"></i> Volver al juego
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="letter.js"></script>
+  </body>
+</html>

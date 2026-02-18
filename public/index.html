@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>🌸 Felices 2.7</title>
+
+    <!-- Remix Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              rose: "#f5c2c7",
+              blush: "#fde8ec",
+              lavender: "#e8d5f5",
+              mint: "#d5f0e8",
+              peach: "#fde5d0",
+              mauve: {
+                DEFAULT: "#c9a0b0",
+                deep: "#a07888",
+                light: "#9b7080",
+              },
+              "text-primary": "#5a3d4a",
+              "text-secondary": "#9b7080",
+            },
+            fontFamily: {
+              serif: ["Playfair Display", "serif"],
+              sans: ["Lato", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      @keyframes fadeDown {
+        from {
+          opacity: 0;
+          transform: translateY(-14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-8deg) translateY(0);
+        }
+        50% {
+          transform: rotate(8deg) translateY(-5px);
+        }
+      }
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        15% {
+          transform: scale(1.22);
+        }
+        30% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(1.12);
+        }
+        60% {
+          transform: scale(1);
+        }
+      }
+      @keyframes popCorrect {
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes shakeWrong {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-7px) rotate(-2deg);
+        }
+        60% {
+          transform: translateX(7px) rotate(2deg);
+        }
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      .animate-fade-down {
+        animation: fadeDown 0.7s ease forwards;
+      }
+      .animate-sway {
+        animation: sway 3.2s ease-in-out infinite;
+      }
+      .animate-heartbeat {
+        animation: heartbeat 1.6s ease infinite;
+      }
+      .animate-pop-correct {
+        animation: popCorrect 0.48s ease;
+      }
+      .animate-shake-wrong {
+        animation: shakeWrong 0.45s ease;
+      }
+      .animate-fall {
+        animation: fall linear forwards;
+      }
+
+      .card-flip-inner {
+        transform-style: preserve-3d;
+        transition: transform 0.58s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-face-down .card-flip-inner {
+        transform: rotateY(180deg);
+      }
+      .card-front,
+      .card-back {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      .card-back {
+        transform: rotateY(180deg);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 50% at 10% 0%,
+            rgba(245, 194, 199, 0.32) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 40% at 90% 100%,
+            rgba(232, 213, 245, 0.32) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 50% 60% at 50% 50%,
+            rgba(253, 232, 236, 0.22) 0%,
+            transparent 70%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+    </style>
+  </head>
+
+  <body
+    class="min-h-screen bg-[#fffbfc] text-text-primary font-sans overflow-x-hidden flex flex-col items-center"
+  >
+    <!-- Confetti Stage -->
+    <div
+      id="confettiStage"
+      class="fixed inset-0 pointer-events-none z-[99] overflow-hidden"
+    ></div>
+
+    <!-- Win Screen -->
+    <div
+      id="winScreen"
+      class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-opacity duration-500"
+      style="
+        background: radial-gradient(
+          ellipse at center,
+          rgba(253, 232, 236, 0.97) 0%,
+          rgba(245, 194, 199, 0.97) 100%
+        );
+      "
+    >
+      <div
+        class="bg-white/90 backdrop-blur-[28px] border border-white/90 rounded-[30px] p-8 md:p-12 max-w-md w-full text-center shadow-[0_28px_72px_rgba(180,100,130,0.22)] translate-y-6 scale-95 transition-all duration-700"
+      >
+        <div
+          class="text-5xl md:text-6xl mb-4 text-mauve-deep animate-heartbeat"
+        >
+          <i class="ri-hearts-fill"></i>
+        </div>
+        <h2 class="font-serif text-3xl md:text-4xl text-text-primary mb-3">
+          ¡Lo lograste!
+        </h2>
+        <p
+          class="text-sm md:text-base text-text-secondary leading-relaxed mb-6"
+        >
+          Superaste las
+          <strong class="text-mauve-deep font-bold">5 rondas</strong>.<br />
+          Te amo muchísimo mi amor. Ahora ve a ver tu sorpresa 💕
+        </p>
+        <div
+          id="winStats"
+          class="flex justify-center gap-3 mb-7 flex-wrap"
+        ></div>
+        <div class="flex flex-col items-center gap-4">
+          <button
+            onclick="goToLetter()"
+            class="w-full bg-gradient-to-r from-rose to-mauve text-white border-0 rounded-full px-10 py-4 text-base font-sans tracking-wide cursor-pointer shadow-[0_7px_24px_rgba(180,100,130,0.34)] transition-all hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(180,100,130,0.4)] active:scale-95 flex items-center justify-center gap-2"
+          >
+            <i class="ri-mail-heart-line"></i> Ver tu sorpresa
+          </button>
+          <button
+            onclick="restartGame('win')"
+            class="text-sm text-text-secondary bg-transparent border-0 cursor-pointer font-sans flex items-center gap-2 underline underline-offset-2 px-3 py-2 transition-colors hover:text-mauve-deep"
+          >
+            <i class="ri-restart-line"></i> Jugar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div
+      id="overScreen"
+      class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-opacity duration-500"
+      style="
+        background: radial-gradient(
+          ellipse at center,
+          rgba(240, 230, 248, 0.97) 0%,
+          rgba(228, 210, 245, 0.97) 100%
+        );
+      "
+    >
+      <div
+        class="bg-white/90 backdrop-blur-[28px] border border-white/90 rounded-[30px] p-8 md:p-12 max-w-md w-full text-center shadow-[0_28px_72px_rgba(180,100,130,0.22)]"
+      >
+        <div class="text-5xl md:text-6xl mb-4" style="color: #c090b8">
+          <i class="ri-heart-break-fill"></i>
+        </div>
+        <h2 class="font-serif text-3xl md:text-4xl text-text-primary mb-3">
+          ¡Sin vidas!
+        </h2>
+        <p
+          id="overBody"
+          class="text-sm md:text-base text-text-secondary leading-relaxed mb-6"
+        >
+          Se acabaron tus
+          <strong class="text-mauve-deep font-bold">3 vidas</strong>.<br />
+          ¡No te rindas, puedes lograrlo! 🌷
+        </p>
+        <div
+          id="overStats"
+          class="flex justify-center gap-3 mb-7 flex-wrap"
+        ></div>
+        <button
+          onclick="restartGame('over')"
+          class="w-full bg-gradient-to-r from-rose to-mauve text-white border-0 rounded-full px-10 py-4 text-base font-sans tracking-wide cursor-pointer shadow-[0_7px_24px_rgba(180,100,130,0.34)] transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
+        >
+          <i class="ri-restart-line"></i> Intentar de nuevo
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Page -->
+    <div
+      class="relative z-10 w-full max-w-[500px] min-h-screen flex flex-col items-center px-5 pb-16"
+    >
+      <!-- Header -->
+      <header class="w-full text-center py-9 pb-4">
+        <div
+          class="flex justify-center gap-2.5 mb-4 opacity-0 animate-fade-down"
+        >
+          <i
+            class="ri-flower-fill text-2xl md:text-3xl text-mauve-deep inline-block animate-sway"
+          ></i>
+          <i
+            class="ri-hearts-fill text-2xl md:text-3xl inline-block animate-sway"
+            style="color: #b070a0; animation-delay: 0.4s"
+          ></i>
+          <i
+            class="ri-sparkling-fill text-2xl md:text-3xl text-mauve inline-block animate-sway"
+            style="animation-delay: 0.8s"
+          ></i>
+          <i
+            class="ri-hearts-fill text-2xl md:text-3xl inline-block animate-sway"
+            style="color: #b070a0; animation-delay: 1.2s"
+          ></i>
+          <i
+            class="ri-flower-fill text-2xl md:text-3xl text-mauve-deep inline-block animate-sway"
+            style="animation-delay: 1.6s"
+          ></i>
+        </div>
+        <h1
+          class="font-serif text-3xl md:text-4xl font-semibold text-text-primary opacity-0 animate-fade-down"
+          style="animation-delay: 0.2s"
+        >
+          Juego de Memoria
+        </h1>
+        <p
+          class="text-sm md:text-base text-text-secondary mt-2 font-light tracking-wide opacity-0 animate-fade-down"
+          style="animation-delay: 0.4s"
+        >
+          ¿Qué tan buena es tu memoria?
+        </p>
+      </header>
+
+      <!-- Status Bar -->
+      <div
+        class="w-full bg-white/75 backdrop-blur-xl border-[1.5px] border-rose/40 rounded-[22px] p-3.5 px-5 flex justify-between items-center my-1 mb-6 gap-2 opacity-0 animate-fade-down"
+        style="animation-delay: 0.5s"
+      >
+        <div class="flex flex-col items-center gap-1 flex-1">
+          <span
+            class="text-[9px] md:text-[11px] text-text-secondary uppercase tracking-widest font-bold"
+            >Puntos</span
+          >
+          <span
+            id="scoreTxt"
+            class="font-serif text-xl md:text-2xl text-mauve-deep leading-none"
+            >0</span
+          >
+        </div>
+        <div class="w-px h-10 bg-mauve/30 flex-shrink-0"></div>
+        <div class="flex flex-col items-center gap-1 flex-1">
+          <span
+            class="text-[9px] md:text-[11px] text-text-secondary uppercase tracking-widest font-bold"
+            >Vidas</span
+          >
+          <div id="livesRow" class="flex gap-1 items-center"></div>
+        </div>
+        <div class="w-px h-10 bg-mauve/30 flex-shrink-0"></div>
+        <div class="flex flex-col items-center gap-1 flex-1">
+          <span
+            class="text-[9px] md:text-[11px] text-text-secondary uppercase tracking-widest font-bold"
+            >Rondas</span
+          >
+          <div id="roundDots" class="flex gap-2 items-center"></div>
+        </div>
+      </div>
+
+      <!-- Game Area -->
+      <div class="w-full flex flex-col items-center gap-5">
+        <!-- Phase Banner -->
+        <div
+          id="phaseBanner"
+          class="hidden w-full bg-gradient-to-br from-rose/40 to-lavender/40 border-[1.5px] border-rose/45 rounded-2xl p-3.5 px-5 text-center"
+        >
+          <p
+            id="phaseTitle"
+            class="font-serif text-lg md:text-xl italic text-mauve-deep leading-tight"
+          ></p>
+          <p
+            id="phaseSub"
+            class="text-xs md:text-sm text-text-secondary mt-1"
+          ></p>
+        </div>
+
+        <!-- Cards Display -->
+        <div
+          id="cardsDisplay"
+          class="w-full grid grid-cols-3 gap-2 md:gap-3.5"
+        ></div>
+
+        <!-- Timer -->
+        <div
+          id="timerWrap"
+          class="hidden w-full h-2 bg-rose/25 rounded-xl overflow-hidden"
+        >
+          <div
+            id="timerBar"
+            class="h-full w-full bg-gradient-to-r from-mint via-rose to-mauve rounded-xl transition-[width] duration-[120ms] linear"
+          ></div>
+        </div>
+
+        <!-- Feedback -->
+        <p
+          id="feedback"
+          class="font-serif italic text-base md:text-lg text-center text-mauve-deep min-h-[26px] transition-opacity duration-250 px-3"
+        ></p>
+
+        <!-- Start Area -->
+        <div id="startArea" class="w-full">
+          <div
+            class="w-full bg-white/70 backdrop-blur-xl border-[1.5px] border-rose/40 rounded-[22px] p-6 px-5 flex flex-col gap-4"
+          >
+            <p
+              class="font-serif text-lg md:text-xl italic text-text-primary text-center pb-1 border-b border-rose/40"
+            >
+              ¿Cómo se juega?
+            </p>
+
+            <div class="flex items-start gap-4">
+              <div
+                class="w-11 h-11 flex-shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl bg-rose/45 text-mauve-deep"
+              >
+                <i class="ri-eye-2-line"></i>
+              </div>
+              <p
+                class="text-xs md:text-sm text-text-primary leading-relaxed pt-3"
+              >
+                Se mostrarán
+                <strong class="text-mauve-deep font-bold">6 cartas</strong> a la
+                vez con distintos símbolos.
+                <strong class="text-mauve-deep font-bold"
+                  >¡Recuerdalas bien!</strong
+                >
+              </p>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div
+                class="w-11 h-11 flex-shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl bg-lavender/55"
+                style="color: #8858b8"
+              >
+                <i class="ri-question-line"></i>
+              </div>
+              <p
+                class="text-xs md:text-sm text-text-primary leading-relaxed pt-3"
+              >
+                Luego desaparecen y aparecen
+                <strong class="text-mauve-deep font-bold">3 cartas</strong>. Una
+                de ellas
+                <strong class="text-mauve-deep font-bold">no estaba</strong>
+                entre las que te mostré. ¡Encuéntrala!
+              </p>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div
+                class="w-11 h-11 flex-shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl bg-mint/55"
+                style="color: #408068"
+              >
+                <i class="ri-crosshair-2-line"></i>
+              </div>
+              <p
+                class="text-xs md:text-sm text-text-primary leading-relaxed pt-3"
+              >
+                Tienes
+                <strong class="text-mauve-deep font-bold"
+                  >5 oportunidades</strong
+                >
+                para completar y solo
+                <strong class="text-mauve-deep font-bold">3 vidas</strong>. Cada
+                error cuesta una vida. ¡Buena suerte!
+              </p>
+            </div>
+          </div>
+
+          <div class="flex justify-center mt-6">
+            <button
+              onclick="startGame()"
+              class="bg-gradient-to-r from-rose to-mauve text-white border-0 rounded-full px-12 py-4 text-base md:text-lg font-sans tracking-wide cursor-pointer shadow-[0_7px_24px_rgba(180,100,130,0.34)] transition-all hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(180,100,130,0.4)] active:scale-95 flex items-center gap-2.5"
+            >
+              <i class="ri-play-circle-line"></i> Comenzar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
